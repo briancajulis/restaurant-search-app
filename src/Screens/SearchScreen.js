@@ -1,22 +1,18 @@
 import React, { useState } from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import SearchBar from '../Components/SearchBar';
-import yelp from '../api/yelp';
+import ResultsList from '../Components/ResultsList';
+import useResults from '../hooks/useResults';
 
 const SearchScreen = () => {
     const [term, setTerm] = useState('');
-    const [results, setResults] = useState([]); // expected to be an array of objects
-    // Two options to call an api: fetch or axios
+    const [searchApi, results, errorMessage] = useResults(term);
 
-    const searchApi = async () => {
-        const response = await yelp.get('/search', {
-            params: { // automatically added into the URL
-                limit: 50,
-                location: 'San Jose',
-                term
-            }
-        });
-        setResults(response.data.businesses);
+    const filterResultsByPrice = (price) => {
+        // price === '$' || '$$' || '$$$'
+        return results.filter(result => {
+            return result.price === price
+        })
     }
 
     return (
@@ -24,16 +20,36 @@ const SearchScreen = () => {
             <SearchBar
                 term={term}
                 onTermChange={setTerm}
-                onTermSubmit={searchApi}
+                onTermSubmit={() => searchApi(term)}
             />
             <Text>Search Screen</Text>
             <Text>We have found {results.length} results.</Text>
+            <ResultsList 
+                title='Cost Effective'
+                results={filterResultsByPrice('$')}
+            />
+            <ResultsList
+                title='Bit Pricier'
+                results={filterResultsByPrice('$$')}
+            />
+            <ResultsList
+                title='Big Spender'
+                results={filterResultsByPrice('$$$')}
+            />
+            <ResultsList
+                title='Big Spender'
+                results={filterResultsByPrice('$$$$')}
+            />
+            {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null}
         </View>
     );
 }
 
-const style = StyleSheet.create({
-
+const styles = StyleSheet.create({
+    error: {
+        color: 'red',
+        fontWeight: "bold",
+    }
 });
 
 export default SearchScreen;
