@@ -4,7 +4,6 @@ import { withNavigation } from 'react-navigation'; // Allows react navigation to
 import ResultDetails from './ResultDetails';
 
 const ResultsList = ({ title, results, navigation }) => {
-
     // Hides a section if there is not results for a specific price range
     if (!results.length) {
         return null;
@@ -22,9 +21,9 @@ const ResultsList = ({ title, results, navigation }) => {
                     return (
                         <View>
                             <TouchableOpacity
-                                onPress={() => navigation.navigate('ResultShow', {
-                                    id: item.id,
-                                })}
+                                onPress={() => (
+                                    navigation.navigate('ResultShow', { id: item.id, name: item.name })
+                                )}
                             >
                                 <ResultDetails
                                     result={item}
