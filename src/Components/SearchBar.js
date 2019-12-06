@@ -23,10 +23,10 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: '#f0eeee',
         borderRadius: 10,
-        marginHorizontal: 15,
+        marginHorizontal: 20,
         flexDirection: 'row',
         height: 70,
-        marginVertical: 10,
+        marginVertical: 20,
         padding: 10,
     },
     textInput: {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import SearchBar from '../Components/SearchBar';
 import ResultsList from '../Components/ResultsList';
 import useResults from '../hooks/useResults';
@@ -16,32 +16,36 @@ const SearchScreen = () => {
     }
 
     return (
-        <View>
+        // This placeholder allows us to wrap all our important elements in a view without having the issues with the View tag
+        <> 
             <SearchBar
                 term={term}
                 onTermChange={setTerm}
                 onTermSubmit={() => searchApi(term)}
             />
-            <Text>Search Screen</Text>
-            <Text>We have found {results.length} results.</Text>
-            <ResultsList 
+            {/* <Text style={{ textAlign: "center", fontWeight: "bold" }}>We have found {results.length} results.</Text> */}
+            {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null}
+            <ScrollView showsVerticalScrollIndicator={false} >
+                <ResultsList 
                 title='Cost Effective'
                 results={filterResultsByPrice('$')}
-            />
-            <ResultsList
-                title='Bit Pricier'
-                results={filterResultsByPrice('$$')}
-            />
-            <ResultsList
-                title='Big Spender'
-                results={filterResultsByPrice('$$$')}
-            />
-            <ResultsList
-                title='Big Spender'
-                results={filterResultsByPrice('$$$$')}
-            />
-            {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null}
-        </View>
+                />
+                <ResultsList
+                    title='Bit Pricier'
+                    results={filterResultsByPrice('$$')}
+                />
+                <ResultsList
+                    title='Big Spender'
+                    results={filterResultsByPrice('$$$')}
+                />
+                <ResultsList
+                    title='Treat Yourself'
+                    results={filterResultsByPrice('$$$$')}
+                />
+            </ScrollView>
+            
+            
+        </>
     );
 }
 
