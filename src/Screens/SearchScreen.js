@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import SearchBar from '../Components/SearchBar';
 import ResultsList from '../Components/ResultsList';
 import useResults from '../hooks/useResults';
@@ -25,10 +25,11 @@ const SearchScreen = () => {
             />
             {/* <Text style={{ textAlign: "center", fontWeight: "bold" }}>We have found {results.length} results.</Text> */}
             {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null}
+            {!results.length ? <ActivityIndicator style={styles.loading} size="large" color="#16a085" /> : null }
             <ScrollView showsVerticalScrollIndicator={false} >
                 <ResultsList 
-                title='Cost Effective'
-                results={filterResultsByPrice('$')}
+                    title='Cost Effective'
+                    results={filterResultsByPrice('$')}
                 />
                 <ResultsList
                     title='Bit Pricier'
@@ -50,6 +51,10 @@ const SearchScreen = () => {
 }
 
 const styles = StyleSheet.create({
+    loading: {
+        flex: 1,
+        justifyContent: 'center',
+    },
     error: {
         color: 'red',
         fontWeight: "bold",

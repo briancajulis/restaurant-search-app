@@ -1,8 +1,15 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, Image } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { withNavigation } from 'react-navigation'; // Allows react navigation to directly give a component navigation props
 import ResultDetails from './ResultDetails';
 
-const ResultsList = ({ title, results }) => {
+const ResultsList = ({ title, results, navigation }) => {
+
+    // Hides a section if there is not results for a specific price range
+    if (!results.length) {
+        return null;
+    }
+
     return (
         <View>
             <Text style={styles.title}>{title}</Text>
@@ -14,9 +21,15 @@ const ResultsList = ({ title, results }) => {
                 renderItem={({ item }) => {
                     return (
                         <View>
-                            <ResultDetails
-                                result={item}
-                            />
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('ResultShow', {
+                                    id: item.id,
+                                })}
+                            >
+                                <ResultDetails
+                                    result={item}
+                                />
+                            </TouchableOpacity>
                         </View>
                     );
                 }}
@@ -35,4 +48,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ResultsList;
+export default withNavigation(ResultsList);
